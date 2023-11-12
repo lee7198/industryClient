@@ -1,11 +1,11 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Main from "./pages/Main";
-import Detect from "./pages/Detect";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Main from '../pages/Main';
+import Detect from '../pages/Detect';
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Main />,
-    children: [{ path: "detection", element: <Detect /> }],
+    children: [{ path: 'detection', element: <Detect /> }],
   },
 ]);
 
