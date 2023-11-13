@@ -16,7 +16,9 @@ export default function Detect() {
   });
 
   const init = async () => {
-    const model = await tf.loadGraphModel('/src/assets/model_e30/model.json');
+    const model = await tf.loadGraphModel(
+      `${window.location.href}/model_e30/model.json`
+    );
 
     // warming up model
     const dummyInput = tf.ones(model.inputs[0].shape);
