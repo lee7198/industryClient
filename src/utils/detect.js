@@ -11,16 +11,8 @@ const numClass = labels.length;
  * @param {Number} modelHeight
  * @returns input tensor, xRatio and yRatio
  */
-const preprocess = (source, modelWidth, modelHeight, image_) => {
-  if (!source) return;
-
+const preprocess = (source, modelWidth, modelHeight) => {
   let xRatio, yRatio; // ratios for boxes
-
-  let image;
-  image = tf.browser.fromPixels(source.current);
-  const x = 640;
-  image = tf.image.resizeBilinear(image, [x, x]);
-  image = tf.expandDims(image, 0);
 
   const input = tf.tidy(() => {
     const img = tf.browser.fromPixels(source);
@@ -42,7 +34,7 @@ const preprocess = (source, modelWidth, modelHeight, image_) => {
       .div(255.0) // normalize
       .expandDims(0); // add batch
   });
-  console.log(input, xRatio, yRatio);
+
   return [input, xRatio, yRatio];
 };
 
@@ -53,25 +45,14 @@ const preprocess = (source, modelWidth, modelHeight, image_) => {
  * @param {HTMLCanvasElement} canvasRef canvas reference
  * @param {VoidFunction} callback function to run after detection process
  */
-export const detect = async (
-  source,
-  model,
-  canvasRef,
-  callback = () => {},
-  image
-) => {
-  // const [modelWidth, modelHeight] = model.inputs[0].shape.slice(1, 3); // get model width and height
-  const modelWidth = model.inputs[0].shape[2];
-  const modelHeight = model.inputs[0].shape[3];
-  tf.engine().startScope(); // start scoping tf engine
-  const [input, xRatio, yRatio] = preprocess(
-    source,
-    modelWidth,
-    modelHeight,
-    image
-  ); // preprocess image
+export const detect = async (source, model, canvasRef, callback = () => {}) => {
+  // const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
+  const [modelWidth, modelHeight] = [256, 256]; // get model width and heigh
 
-  const res = model.net.execute(input); // inference model
+  tf.engine().startScope(); // start scoping tf engine
+  const [input, xRatio, yRatio] = preprocess(source, modelWidth, modelHeight); // preprocess image
+
+  const res = model.execute(input); // inference model
   const transRes = res.transpose([0, 2, 1]); // transpose result [b, det, n] => [b, n, det]
   const boxes = tf.tidy(() => {
     const w = transRes.slice([0, 0, 2], [-1, -1, 1]); // get width
@@ -107,7 +88,6 @@ export const detect = async (
 
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync(); // indexing scores by nms index
-  console.log(scores_data);
   const classes_data = classes.gather(nms, 0).dataSync(); // indexing classes by nms index
 
   renderBoxes(canvasRef, boxes_data, scores_data, classes_data, [

@@ -5,8 +5,6 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'airbnb-typescript',
-    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
   ],
@@ -21,13 +19,13 @@ module.exports = {
       },
     },
   ],
-  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'prettier', 'react'],
+  plugins: ['prettier', 'react'],
   rules: {
     'prettier/prettier': 'error',
+    'no-unused-vars': 1,
   },
 };
