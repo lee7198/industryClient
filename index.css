@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "NanumSquareNeo";
+  src: url("./assets/font/NanumSquareNeoTTF-aLt.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "NanumSquareNeo";
+  src: url("./assets/font/NanumSquareNeoTTF-cBd.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "NanumSquareNeo";
+  src: url("./assets/font/NanumSquareNeoTTF-eHv.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: block;
+}
+
+* {
+  font-family: "NanumSquareNeo";
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
