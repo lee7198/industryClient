@@ -1,11 +1,11 @@
+import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Main from './pages/Main';
+
 import Detect from './pages/Detect';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Main />,
-    children: [{ path: 'detection', element: <Detect /> }],
+    element: <Detect />,
   },
 ]);
 
