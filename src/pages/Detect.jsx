@@ -20,22 +20,22 @@ export default function Detect() {
     if (webcamRef && webcamRef.current) {
       let image;
       image = tf.browser.fromPixels(webcamRef.current.video);
-      const x = 256;
+      const x = 640;
       image = tf.image.resizeBilinear(image, [x, x]);
       image = tf.expandDims(image, 0);
 
-      const prediction = model
-        .executeAsync(image)
-        .then((res) => console.log(res.dataSync()));
+      const prediction = model.execute(image);
+      // .executeAsync(image)
+      // .then((res) => console.log(res.dataSync()));
       // console.log(prediction);
       if (prediction instanceof tf.Tensor) {
         const predictionArray = prediction.dataSync();
 
-        // console.log(
-        //   predictionArray.indexOf(
-        //     predictionArray.reduce((max, v) => (max >= v ? max : v), -Infinity)
-        //   )
-        // );
+        console.log(
+          predictionArray.indexOf(
+            predictionArray.reduce((max, v) => (max >= v ? max : v), -Infinity)
+          )
+        );
 
         // const maxValue = predictionArray.indexOf(Math.max(...predictionArray));
         // setEmotion(emotionIndex[maxValue]);
@@ -51,7 +51,7 @@ export default function Detect() {
 
   const init = async () => {
     const model = await tf
-      .loadGraphModel('/src/assets/model_e30/model.json')
+      .loadGraphModel('/src/assets/new/model.json')
       .then((res) => {
         console.log('init model' + res.modelUrl);
         setModel({
@@ -69,7 +69,7 @@ export default function Detect() {
 
     const detection = setInterval(async () => {
       capture();
-      run(await model_);
+      // run(await model_);
     }, 1000);
 
     return () => {
