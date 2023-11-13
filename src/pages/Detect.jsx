@@ -17,7 +17,7 @@ export default function Detect() {
 
   const init = async () => {
     const model = await tf.loadGraphModel(
-      `${window.location.href}/model_e30/model.json`
+      `${window.location.href}/model/model.json`
     );
 
     // warming up model
