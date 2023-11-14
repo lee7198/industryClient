@@ -66,12 +66,12 @@ export default function Detect() {
           height={model.inputShape[2]}
         />
         <Webcam
-          className="sm:w-full max-w-[720px] w-3/4 aspect-[1.33333] rounded-xl"
+          className="sm:w-full sm:aspect-auto sm:px-4 max-w-[720px] w-3/4 aspect-[1.33333] rounded-xl"
           ref={webcamRef}
           onPlay={detectRun}
         />
         <canvas
-          className="sm:w-full aspect-[1.33333] absolute top-0 left-1/2 -translate-x-1/2 w-3/4"
+          className="sm:w-full sm:aspect-auto sm:px-4 aspect-[1.33333] absolute top-0 left-1/2 -translate-x-1/2 w-3/4"
           width={model.inputShape[1]}
           height={model.inputShape[2]}
           ref={canvasRef}
