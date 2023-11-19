@@ -2,6 +2,8 @@ import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import Webcam from 'react-webcam';
+
+// @ts-ignore-error
 import { detectVideo } from '../utils/detection';
 
 export default function Detect() {
@@ -17,7 +19,7 @@ export default function Detect() {
 
   const init = async () => {
     const yolo = await tf.loadGraphModel(
-      `${window.location.href}/model/model.json`
+      `${window.location.href}/model/model.json`,
     );
     if (yolo.inputs[0].shape) {
       // warming up model
@@ -51,16 +53,18 @@ export default function Detect() {
   }, [model]);
 
   return (
-    <div className="w-full h-[100svh] flex items-center justify-center flex-col overflow-x-scroll bg-[#e0e0e0]">
-      <h1 className="text-6xl py-4 text-zinc-800">EMOTY</h1>
-      <div className="relative flex justify-center items-center">
+    <div className="flex h-[100svh] w-full flex-col items-center justify-center overflow-x-scroll bg-[#e0e0e0]">
+      <h1 className="py-4 text-3xl text-zinc-800">
+        지역산업 SW인재양성 기반조성사업
+      </h1>
+      <div className="relative flex items-center justify-center">
         <Webcam
-          className="sm:w-full sm:px-4 max-w-[720px] w-3/4 aspect-[1.33333] rounded-xl"
+          className="aspect-[1.33333] w-3/4 max-w-[720px] rounded-xl sm:w-full sm:px-4"
           ref={webcamRef}
           onPlay={detectRun}
         />
         <canvas
-          className="sm:w-full sm:px-4 max-w-[720px] aspect-[1.33333] absolute top-0 left-1/2 -translate-x-1/2 w-3/4"
+          className="absolute left-1/2 top-0 aspect-[1.33333] w-3/4 max-w-[720px] -translate-x-1/2 sm:w-full sm:px-4"
           width={model.inputShape[1]}
           height={model.inputShape[2]}
           ref={canvasRef}

@@ -5,10 +5,8 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
-    'plugin:prettier/recommended',
   ],
   overrides: [
     {
@@ -21,13 +19,15 @@ module.exports = {
       },
     },
   ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['prettier', 'react'],
+  plugins: ['@typescript-eslint', 'react'],
   rules: {
-    'prettier/prettier': 'error',
-    'no-unused-vars': 1,
+    '@typescript-eslint/no-empty-function': 0,
+    '@typescript-eslint/ban-ts-comment': 0,
+    '@typescript-eslint/no-unused-vars': 1,
   },
 };

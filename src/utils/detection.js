@@ -68,7 +68,7 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
           tf.add(y1, h), //y2
           tf.add(x1, w), //x2
         ],
-        2
+        2,
       )
       .squeeze();
   }); // process boxes [y1, x1, y2, x2]
@@ -84,7 +84,7 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
     scores,
     500,
     0.45,
-    0.2
+    0.2,
   ); // NMS to filter boxes
 
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
