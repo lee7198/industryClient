@@ -76,14 +76,14 @@ export default function Detect() {
     <div className="flex h-[100svh] w-full touch-none flex-col items-center justify-center overflow-x-scroll">
       <div className="relative flex h-full w-full flex-col items-center justify-center">
         <div
-          className={`relative aspect-[0.75] w-full bg-zinc-200 ${
+          className={`relative aspect-[0.75] w-full bg-zinc-200 sm:aspect-[1.3333] sm:w-3/4 sm:rounded-2xl md:max-w-[1080px] ${
             !webcamRef.current ? 'animate-pulse' : ''
           }`}
         >
           {webcamRef.current ? (
             <>
-              <div className="absolute right-3 top-3 h-3 w-3 animate-pulse rounded-full bg-green-500" />
-              <div className="absolute left-3 top-3 rounded-full bg-white px-2 pt-[1px] text-xs uppercase">
+              <div className="absolute right-3 top-3 h-3 w-3 animate-pulse rounded-full bg-green-500 md:right-4 md:top-4 md:h-4 md:w-4" />
+              <div className="absolute left-3 top-3 rounded-full bg-white px-2 pt-[1px] text-xs uppercase md:text-base">
                 {models[modelIndex]}
               </div>
             </>
@@ -91,7 +91,7 @@ export default function Detect() {
             <ProgressBar className="absolute bottom-[-2px]" />
           )}
           <Webcam
-            className="aspect-[0.75] w-full object-cover"
+            className="aspect-[0.75] w-full object-cover sm:aspect-[1.3333] sm:rounded-2xl md:max-w-[1080px]"
             ref={webcamRef}
             onPlay={detectRun}
             videoConstraints={videoConstraints}

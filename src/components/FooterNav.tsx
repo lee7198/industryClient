@@ -13,16 +13,16 @@ export default function FooterNav({
   };
 }) {
   return (
-    <div className="flex w-full items-center justify-around gap-3 p-4">
-      <div className="flex items-center gap-1" role="group">
+    <div className="flex w-full items-center justify-around gap-3 p-4 md:max-w-[1080px]">
+      <div className="flex items-center gap-3" role="group">
         {models.map((model, idx) => (
           <>
             {idx > 0 && <div className="h-3 w-[1px] bg-zinc-500" />}
             <div
               key={model}
-              className={` px-2 py-2 text-xs focus:z-10 focus:text-gray-900 ${
+              className={`cursor-pointer text-xs md:text-base ${
                 indexControl.modelIndex === idx
-                  ? 'text-gray-900 underline'
+                  ? 'h-4 bg-sky-300 p-0 text-gray-900'
                   : 'text-gray-500 '
               } `}
               onClick={() => indexControl.setModelIndex(idx)}
@@ -34,7 +34,7 @@ export default function FooterNav({
       </div>
       <div
         onClick={handleCameraSwitch}
-        className="transition-all duration-300 ease-in-out active:scale-[90%]"
+        className="cursor-pointer transition-all duration-300 ease-in-out active:scale-[90%]"
       >
         <CameraRotate size={28} weight="light" />
       </div>
