@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import Webcam from 'react-webcam';
-import { detectVideo } from '../utils/detect';
+import { detectVideo } from '../utils/detection';
 
 export default function Detect() {
   const webcamRef = useRef(null);
