@@ -86,7 +86,7 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
     0.45,
     0.2,
   ); // NMS to filter boxes
-
+  if (!tf.Tensor1D) return;
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync(); // indexing scores by nms index
   const classes_data = classes.gather(nms, 0).dataSync(); // indexing classes by nms index
