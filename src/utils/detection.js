@@ -2,8 +2,8 @@ import * as tf from '@tensorflow/tfjs';
 import { renderBoxes } from './renderBox';
 import labels from './labels.json';
 
-// const numClass = labels.length;
-const numClass = 5;
+const numClass = labels.length;
+// const numClass = 5;
 
 /**
  * Preprocess image / frame before forwarded into the model
@@ -48,7 +48,7 @@ const preprocess = (source, modelWidth, modelHeight) => {
  */
 export const detect = async (source, model, canvasRef, callback = () => {}) => {
   // const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
-  const [modelWidth, modelHeight] = [256, 256]; // get model width and heigh
+  const [modelWidth, modelHeight] = [640, 640]; // get model width and heigh
 
   tf.engine().startScope(); // start scoping tf engine
   const [input, xRatio, yRatio] = preprocess(source, modelWidth, modelHeight); // preprocess image

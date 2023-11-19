@@ -5,6 +5,7 @@ import Webcam from 'react-webcam';
 
 // @ts-ignore-error
 import { detectVideo } from '../utils/detection';
+import Loading from '../components/Loading';
 
 export default function Detect() {
   const webcamRef = useRef(null);
@@ -53,22 +54,34 @@ export default function Detect() {
   }, [model]);
 
   return (
-    <div className="flex h-[100svh] w-full flex-col items-center justify-center overflow-x-scroll bg-[#e0e0e0]">
+    <div className="flex h-[100svh] w-full flex-col items-center justify-center overflow-x-scroll">
       <h1 className="py-4 text-3xl text-zinc-800">
         지역산업 SW인재양성 기반조성사업
       </h1>
       <div className="relative flex items-center justify-center">
-        <Webcam
-          className="aspect-[1.33333] w-3/4 max-w-[720px] rounded-xl sm:w-full sm:px-4"
-          ref={webcamRef}
-          onPlay={detectRun}
-        />
-        <canvas
-          className="absolute left-1/2 top-0 aspect-[1.33333] w-3/4 max-w-[720px] -translate-x-1/2 sm:w-full sm:px-4"
-          width={model.inputShape[1]}
-          height={model.inputShape[2]}
-          ref={canvasRef}
-        />
+        <div
+          className={`relative aspect-[1.33333] h-[400px] max-w-[720px] rounded-xl bg-zinc-300 sm:w-full ${
+            !webcamRef.current ? 'animate-pulse' : ''
+          }`}
+        >
+          {webcamRef.current ? (
+            <div className="absolute right-4 top-4 h-4 w-4 animate-pulse rounded-full bg-green-500" />
+          ) : (
+            <Loading className="absolute right-1/2 top-1/2 -translate-y-1/2 translate-x-1/2 " />
+          )}
+          <Webcam
+            className="aspect-[1.33333] w-full rounded-xl sm:w-full "
+            ref={webcamRef}
+            onPlay={detectRun}
+          />
+
+          <canvas
+            className="absolute left-1/2 top-0 aspect-[1.33333] h-full -translate-x-1/2 sm:w-full"
+            width={model.inputShape[1]}
+            height={model.inputShape[2]}
+            ref={canvasRef}
+          />
+        </div>
       </div>
     </div>
   );
