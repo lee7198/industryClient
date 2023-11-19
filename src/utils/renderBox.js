@@ -7,13 +7,15 @@ import labels from './labels.json';
  * @param {Array} scores_data scores array
  * @param {Array} classes_data class array
  * @param {Array[Number]} ratios boxes ratio [xRatio, yRatio]
+ * @param {React.Dispatch<React.SetStateAction<LogData>>} setLog
  */
 export const renderBoxes = (
   canvasRef,
   boxes_data,
   scores_data,
   classes_data,
-  ratios
+  ratios,
+  setLog,
 ) => {
   const ctx = canvasRef.getContext('2d');
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
@@ -23,7 +25,7 @@ export const renderBoxes = (
   // font configs
   const font = `${Math.max(
     Math.round(Math.max(ctx.canvas.width, ctx.canvas.height) / 40),
-    14
+    14,
   )}px Arial`;
   ctx.font = font;
   ctx.textBaseline = 'top';
@@ -33,6 +35,13 @@ export const renderBoxes = (
     const klass = labels[classes_data[i]];
     const color = colors.get(classes_data[i]);
     const score = (scores_data[i] * 100).toFixed(1);
+
+    if (classes_data.length != 0) {
+      setLog((prev) => {
+        if (prev.list.indexOf(labels[classes_data[i]]) !== -1) return prev;
+        else return { ...prev, list: [...prev.list, labels[classes_data[i]]] };
+      });
+    }
 
     let [y1, x1, y2, x2] = boxes_data.slice(i * 4, (i + 1) * 4);
     x1 *= ratios[0];
@@ -50,7 +59,7 @@ export const renderBoxes = (
     ctx.strokeStyle = color;
     ctx.lineWidth = Math.max(
       Math.min(ctx.canvas.width, ctx.canvas.height) / 200,
-      2.5
+      2.5,
     );
     ctx.strokeRect(x1, y1, width, height);
 
@@ -63,7 +72,7 @@ export const renderBoxes = (
       x1 - 1,
       yText < 0 ? 0 : yText, // handle overflow label box
       textWidth + ctx.lineWidth,
-      textHeight + ctx.lineWidth
+      textHeight + ctx.lineWidth,
     );
 
     // Draw labels

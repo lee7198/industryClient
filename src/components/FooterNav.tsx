@@ -16,20 +16,19 @@ export default function FooterNav({
     <div className="flex w-full items-center justify-around gap-3 p-4 md:max-w-[1080px]">
       <div className="flex items-center gap-3" role="group">
         {models.map((model, idx) => (
-          <>
+          <React.Fragment key={model}>
             {idx > 0 && <div className="h-3 w-[1px] bg-zinc-500" />}
             <div
-              key={model}
-              className={`cursor-pointer text-xs md:text-base ${
+              className={`h-4 cursor-pointer text-xs md:text-base ${
                 indexControl.modelIndex === idx
-                  ? 'h-4 bg-sky-300 p-0 text-gray-900'
+                  ? 'bg-zinc-600 text-white'
                   : 'text-gray-500 '
               } `}
               onClick={() => indexControl.setModelIndex(idx)}
             >
               {model}
             </div>
-          </>
+          </React.Fragment>
         ))}
       </div>
       <div

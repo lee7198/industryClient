@@ -45,8 +45,15 @@ const preprocess = (source, modelWidth, modelHeight) => {
  * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
  * @param {HTMLCanvasElement} canvasRef canvas reference
  * @param {VoidFunction} callback function to run after detection process
+ * @param {React.Dispatch<React.SetStateAction<LogData>>} setLog
  */
-export const detect = async (source, model, canvasRef, callback = () => {}) => {
+export const detect = async (
+  source,
+  model,
+  canvasRef,
+  callback = () => {},
+  setLog,
+) => {
   // const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
   const [modelWidth, modelHeight] = [640, 640]; // get model width and heigh
 
@@ -86,15 +93,19 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
     0.45,
     0.2,
   ); // NMS to filter boxes
-  if (!tf.Tensor1D) return;
+  // if (!tf.Tensor1D) return;
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync(); // indexing scores by nms index
   const classes_data = classes.gather(nms, 0).dataSync(); // indexing classes by nms index
 
-  renderBoxes(canvasRef, boxes_data, scores_data, classes_data, [
-    xRatio,
-    yRatio,
-  ]); // render boxes
+  renderBoxes(
+    canvasRef,
+    boxes_data,
+    scores_data,
+    classes_data,
+    [xRatio, yRatio],
+    setLog,
+  ); // render boxes
   tf.dispose([res, transRes, boxes, scores, classes, nms]); // clear memory
 
   callback();
@@ -107,8 +118,9 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
  * @param {HTMLVideoElement} vidSource video source
  * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
  * @param {HTMLCanvasElement} canvasRef canvas reference
+ * @param {React.Dispatch<React.SetStateAction<LogData>} setLog
  */
-export const detectVideo = (vidSource, model, canvasRef) => {
+export const detectVideo = (vidSource, model, canvasRef, setLog) => {
   /**
    * Function to detect every frame from video
    */
@@ -119,9 +131,15 @@ export const detectVideo = (vidSource, model, canvasRef) => {
       return; // handle if source is closed
     }
 
-    detect(vidSource, model, canvasRef, () => {
-      requestAnimationFrame(detectFrame); // get another frame
-    });
+    detect(
+      vidSource,
+      model,
+      canvasRef,
+      () => {
+        requestAnimationFrame(detectFrame); // get another frame
+      },
+      setLog,
+    );
   };
 
   detectFrame(); // initialize to detect every frame
