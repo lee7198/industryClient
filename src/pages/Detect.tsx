@@ -85,6 +85,7 @@ export default function Detect() {
 
   useEffect(() => {
     detectRun();
+    handleCameraSwitch();
   }, [model]);
 
   useEffect(() => {
