@@ -6,11 +6,13 @@ import Webcam from 'react-webcam';
 import { detectVideo } from '../utils/detection';
 import ProgressBar from '../components/ProgressBar';
 import FooterNav from '../components/FooterNav';
-import { models } from '../data';
-import { ClockCounterClockwise } from '@phosphor-icons/react';
-import LogList from '../components/LogList';
+import { initLogData, models } from '../data';
+import LogListMobile from '../components/LogListMobile';
 import { AnimatePresence } from 'framer-motion';
-import { LogData, initLogData } from '../type.d';
+import { LogData } from '../type.d';
+import Status from '../components/Status';
+import useWindowSize from '../hooks/useWindowSize';
+import LogList from '../components/LogList';
 
 const FACING_MODE_USER = 'user';
 const FACING_MODE_ENVIRONMENT = 'environment';
@@ -18,6 +20,7 @@ const FACING_MODE_ENVIRONMENT = 'environment';
 export default function Detect() {
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const [model, setModel] = useState<{
     net?: tf.GraphModel<string | tf.io.IOHandler>;
     inputShape: number[];
@@ -30,7 +33,10 @@ export default function Detect() {
   });
   const [modelIndex, setModelIndex] = useState(0);
   const [log, setLog] = useState<LogData>(initLogData);
+  const [fps, setFps] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+
+  const screen = useWindowSize();
 
   const init = async () => {
     const yolo = await tf.loadGraphModel(
@@ -59,6 +65,7 @@ export default function Detect() {
         model.net,
         canvasRef.current,
         setLog,
+        setFps,
       );
   };
 
@@ -85,40 +92,23 @@ export default function Detect() {
 
   return (
     <>
-      <div className="flex h-[100svh] w-full touch-none flex-col items-center justify-center overflow-x-scroll">
-        <div className="relative flex h-full w-full flex-col items-center justify-center pb-10">
-          {/* header */}
-          <div className="flex w-full justify-end px-2 md:max-w-[1080px]">
-            <div
-              className="relative p-2"
-              onClick={() => setOpenModal((prev) => !prev)}
-            >
-              {log.list && (
-                <div className="absolute right-1 top-1 h-4 w-4 rounded-full bg-[#f23041] text-center text-[10px] leading-[16px] text-white">
-                  {log.list.length}
-                </div>
-              )}
-              <ClockCounterClockwise size={28} weight="light" />
-            </div>
-          </div>
-
+      <div className="flex h-[100svh] w-full touch-none flex-row items-center justify-center gap-4 overflow-x-scroll sm:px-10">
+        <div
+          className="relative flex flex-col items-center justify-center pb-10 sm:pb-0"
+          ref={contentRef}
+        >
           <div
-            className={`relative aspect-[0.75] w-full bg-zinc-200 sm:aspect-[1.3333] sm:w-3/4 sm:rounded-2xl md:max-w-[1080px] ${
+            className={`relative aspect-[0.75] bg-zinc-200 sm:aspect-[1.3333]  sm:max-w-[75vw] sm:rounded-2xl xl:max-w-[50vw] ${
               !webcamRef.current ? 'animate-pulse' : ''
             }`}
           >
-            {webcamRef.current ? (
-              <>
-                <div className="absolute right-3 top-3 h-3 w-3 animate-pulse rounded-full bg-green-500 md:right-4 md:top-4 md:h-4 md:w-4" />
-                <div className="absolute left-3 top-3 rounded-full bg-white px-2 pt-[1px] text-xs uppercase md:text-base">
-                  {models[modelIndex]}
-                </div>
-              </>
+            {webcamRef && webcamRef.current ? (
+              <Status webcamRef={webcamRef} fps={fps} />
             ) : (
               <ProgressBar className="absolute bottom-[-2px]" />
             )}
             <Webcam
-              className="aspect-[0.75] w-full object-cover sm:aspect-[1.3333] sm:rounded-2xl md:max-w-[1080px]"
+              className="relative aspect-[0.75] w-full object-cover sm:aspect-[1.3333] sm:max-w-[75vw] sm:rounded-2xl xl:max-w-[50vw] "
               ref={webcamRef}
               onPlay={detectRun}
               videoConstraints={videoConstraints}
@@ -134,18 +124,37 @@ export default function Detect() {
 
           <FooterNav
             handleCameraSwitch={handleCameraSwitch}
+            setOpenModal={setOpenModal}
             indexControl={{
               modelIndex: modelIndex,
               setModelIndex: setModelIndex,
             }}
+            log={log}
           />
         </div>
-      </div>
-      <AnimatePresence mode="wait">
-        {openModal && (
-          <LogList log={log} setLog={setLog} setOpenModal={setOpenModal} />
+
+        {screen.width > screen.height ? (
+          <LogList
+            log={log}
+            setLog={setLog}
+            height={
+              contentRef.current?.clientHeight
+                ? contentRef.current?.clientHeight
+                : 100
+            }
+          />
+        ) : (
+          <AnimatePresence mode="wait">
+            {openModal && (
+              <LogListMobile
+                log={log}
+                setLog={setLog}
+                setOpenModal={setOpenModal}
+              />
+            )}
+          </AnimatePresence>
         )}
-      </AnimatePresence>
+      </div>
     </>
   );
 }

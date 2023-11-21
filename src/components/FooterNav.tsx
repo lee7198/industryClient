@@ -1,41 +1,50 @@
 import React from 'react';
-import { CameraRotate } from '@phosphor-icons/react';
-import { models } from '../data';
+import { CameraRotate, ClockCounterClockwise } from '@phosphor-icons/react';
+// import { models } from '../data';
+import { LogData } from '../type';
+import logo from '../assets/images/kmu_logo.jpg';
 
 export default function FooterNav({
   handleCameraSwitch,
+  setOpenModal,
   indexControl,
+  log,
 }: {
   handleCameraSwitch: () => void;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  log: LogData;
   indexControl: {
     modelIndex: number;
     setModelIndex: React.Dispatch<React.SetStateAction<number>>;
   };
 }) {
   return (
-    <div className="flex w-full items-center justify-around gap-3 p-4 md:max-w-[1080px]">
-      <div className="flex items-center gap-3" role="group">
-        {models.map((model, idx) => (
-          <React.Fragment key={model}>
-            {idx > 0 && <div className="h-3 w-[1px] bg-zinc-500" />}
-            <div
-              className={`h-4 cursor-pointer text-xs md:text-base ${
-                indexControl.modelIndex === idx
-                  ? 'bg-zinc-600 text-white'
-                  : 'text-gray-500 '
-              } `}
-              onClick={() => indexControl.setModelIndex(idx)}
-            >
-              {model}
-            </div>
-          </React.Fragment>
-        ))}
+    <div className="flex w-full items-center justify-between gap-3 px-4 py-4 sm:max-w-[75vw] sm:px-0 xl:max-w-[50vw]">
+      <div className="flex items-center text-sm">
+        <img src={logo} className="w-10" />
+        <p className="hidden sm:block sm:text-xs">
+          계명대학교 컴퓨터공학과 산학프로젝트
+        </p>
       </div>
-      <div
-        onClick={handleCameraSwitch}
-        className="cursor-pointer transition-all duration-300 ease-in-out active:scale-[90%]"
-      >
-        <CameraRotate size={28} weight="light" />
+
+      <div className="flex flex-row gap-1 sm:gap-4">
+        <div
+          className="relative cursor-pointer p-2"
+          onClick={() => setOpenModal((prev) => !prev)}
+        >
+          {log.list.length !== 0 && (
+            <div className="absolute right-1 top-1 h-4 w-4 rounded-full bg-[#f23041] text-center text-[10px] leading-[16px] text-white">
+              {log.list.length}
+            </div>
+          )}
+          <ClockCounterClockwise size={28} weight="light" />
+        </div>
+        <div
+          onClick={handleCameraSwitch}
+          className="cursor-pointer p-2 transition-all duration-300 ease-in-out active:scale-[90%]"
+        >
+          <CameraRotate size={28} weight="light" />
+        </div>
       </div>
     </div>
   );

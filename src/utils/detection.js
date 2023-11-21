@@ -3,7 +3,6 @@ import { renderBoxes } from './renderBox';
 import labels from './labels.json';
 
 const numClass = labels.length;
-// const numClass = 5;
 
 /**
  * Preprocess image / frame before forwarded into the model
@@ -53,6 +52,7 @@ export const detect = async (
   canvasRef,
   callback = () => {},
   setLog,
+  setFps,
 ) => {
   // const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
   const [modelWidth, modelHeight] = [640, 640]; // get model width and heigh
@@ -67,6 +67,22 @@ export const detect = async (
     const h = transRes.slice([0, 0, 3], [-1, -1, 1]); // get height
     const x1 = tf.sub(transRes.slice([0, 0, 0], [-1, -1, 1]), tf.div(w, 2)); // x1
     const y1 = tf.sub(transRes.slice([0, 0, 1], [-1, -1, 1]), tf.div(h, 2)); // y1
+
+    // calc fps
+    setLog((prev) => {
+      const count = prev.fpsCounter.count;
+      // calc fps
+      if (prev.fpsCounter.last < Date.now() - 1000) {
+        prev.fpsCounter.count[0] = count[1];
+        setFps(count[1]);
+        prev.fpsCounter.last = Date.now();
+        count[1] = 0;
+      } else {
+        count[1]++;
+      }
+      return prev;
+    });
+
     return tf
       .concat(
         [
@@ -93,7 +109,7 @@ export const detect = async (
     0.45,
     0.2,
   ); // NMS to filter boxes
-  // if (!tf.Tensor1D) return;
+
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync(); // indexing scores by nms index
   const classes_data = classes.gather(nms, 0).dataSync(); // indexing classes by nms index
@@ -120,10 +136,11 @@ export const detect = async (
  * @param {HTMLCanvasElement} canvasRef canvas reference
  * @param {React.Dispatch<React.SetStateAction<LogData>} setLog
  */
-export const detectVideo = (vidSource, model, canvasRef, setLog) => {
+export const detectVideo = (vidSource, model, canvasRef, setLog, setFps) => {
   /**
    * Function to detect every frame from video
    */
+
   const detectFrame = async () => {
     if (vidSource.videoWidth === 0 && vidSource.srcObject === null) {
       const ctx = canvasRef.getContext('2d');
@@ -139,6 +156,7 @@ export const detectVideo = (vidSource, model, canvasRef, setLog) => {
         requestAnimationFrame(detectFrame); // get another frame
       },
       setLog,
+      setFps,
     );
   };
 

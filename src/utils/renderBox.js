@@ -36,8 +36,12 @@ export const renderBoxes = (
     const color = colors.get(classes_data[i]);
     const score = (scores_data[i] * 100).toFixed(1);
 
+    // 80% 이상의 score만 반영
+    // if (score < 50) return;
+
     if (classes_data.length != 0) {
       setLog((prev) => {
+        // 중복 제거
         if (prev.list.indexOf(labels[classes_data[i]]) !== -1) return prev;
         else return { ...prev, list: [...prev.list, labels[classes_data[i]]] };
       });

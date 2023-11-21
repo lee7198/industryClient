@@ -1,6 +1,10 @@
 export interface LogData {
   list: string[];
   valid: Valid[];
+  fpsCounter: {
+    count: number[];
+    last: number;
+  };
 }
 
 interface Valid {
@@ -8,8 +12,3 @@ interface Valid {
   total: number;
   lastUpdate: Date;
 }
-
-export const initLogData: LogData = {
-  list: [],
-  valid: [],
-};

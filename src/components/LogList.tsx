@@ -1,44 +1,40 @@
-import { Trash, X } from '@phosphor-icons/react';
 import React from 'react';
-import { motion } from 'framer-motion';
-import { LogData, initLogData } from '../type.d';
+import { LogData } from '../type';
+import { Trash } from '@phosphor-icons/react';
+import { initLogData } from '../data';
 
 export default function LogList({
   log,
   setLog,
-  setOpenModal,
+  height,
 }: {
   log: LogData;
   setLog: React.Dispatch<React.SetStateAction<LogData>>;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  height: number;
 }) {
   return (
-    <motion.div
-      key="modal"
-      initial={{ translateX: '100%' }}
-      animate={{ translateX: 0 }}
-      exit={{ translateX: '100%' }}
-      transition={{ duration: 0.2 }}
-      className="fixed right-0 top-0 z-50 h-[100svh] w-full bg-white px-4"
+    <div
+      className={`h-auto w-52 overflow-hidden rounded-2xl bg-zinc-100 px-2 py-4`}
+      style={{ height: height }}
     >
-      <div className="flex w-full justify-end gap-5 pt-10">
-        <div onClick={() => setLog(initLogData)}>
-          <Trash size={28} weight="light" />
+      <div className="mb-1 flex flex-row items-center justify-between border-b pb-1">
+        <div className="flex gap-2 text-xs">
+          <div>차종</div>
+          <div className="rounded-md bg-zinc-800 px-2 text-white">
+            {log.list.length}
+          </div>
         </div>
-        <div onClick={() => setOpenModal(false)}>
-          <X size={28} weight="light" />
+        <div
+          className="cursor-pointer rounded-md px-2 py-[4px] hover:bg-zinc-700/20"
+          onClick={() => setLog(initLogData)}
+        >
+          <Trash size={18} weight="light" />
         </div>
       </div>
 
-      <div className="flex gap-2 pb-2">
-        <div>차종</div>
-        <div className="rounded-md bg-zinc-800 px-2 text-white">
-          {log.list.length}
-        </div>
-      </div>
-      <div className="">
+      <div className="h-full overflow-x-scroll text-xs">
         {!log || log.list.length === 0 ? (
-          <div className="pt-20 text-center">
+          <div className="break-words pt-20 text-center">
             발견한 차량이 존재하지 않습니다. 🚙
           </div>
         ) : (
@@ -49,6 +45,6 @@ export default function LogList({
           ))
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }
