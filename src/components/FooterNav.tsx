@@ -29,7 +29,7 @@ export default function FooterNav({
 
       <div className="flex flex-row gap-1 sm:gap-4">
         <div
-          className="relative block cursor-pointer p-2 sm:hidden"
+          className="relative block cursor-pointer p-2 md:hidden"
           onClick={() => setOpenModal((prev) => !prev)}
         >
           {log.list.length !== 0 && (

@@ -7,16 +7,16 @@ import Loading from './Loading';
 export default function LogList({
   log,
   setLog,
-  height,
+  contentRef,
 }: {
   log: LogData;
   setLog: React.Dispatch<React.SetStateAction<LogData>>;
-  height: number | undefined;
+  contentRef: React.MutableRefObject<HTMLDivElement | null>;
 }) {
-  return height ? (
+  return contentRef.current ? (
     <div
       className={`h-auto w-52 overflow-hidden rounded-2xl bg-zinc-100 px-2 py-4`}
-      style={{ height: height }}
+      style={{ height: contentRef.current.clientHeight }}
     >
       <div className="mb-1 flex flex-row items-center justify-between border-b pb-1">
         <div className="flex gap-2 text-xs">

@@ -19,6 +19,7 @@ const FACING_MODE_USER = 'user';
 const FACING_MODE_ENVIRONMENT = 'environment';
 
 export default function Detect() {
+  const [detecting, setDetecting] = useState(false);
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -60,7 +61,7 @@ export default function Detect() {
   };
 
   const detectRun = () => {
-    if (model.net && webcamRef.current && canvasRef.current)
+    if (model.net && webcamRef.current && canvasRef.current) {
       detectVideo(
         webcamRef.current['video'],
         model.net,
@@ -68,6 +69,8 @@ export default function Detect() {
         setLog,
         setFps,
       );
+      setDetecting(true);
+    }
   };
 
   const handleCameraSwitch = useCallback(() => {
@@ -109,9 +112,9 @@ export default function Detect() {
             )}
             <Webcam
               className="relative aspect-[0.75] w-full object-cover sm:aspect-[1.3333] sm:max-w-[75vw] sm:rounded-2xl xl:max-w-[50vw] "
-              ref={webcamRef}
-              onPlay={detectRun}
               videoConstraints={videoConstraints}
+              onPlay={detectRun}
+              ref={webcamRef}
             />
 
             <canvas
@@ -134,11 +137,13 @@ export default function Detect() {
         </div>
 
         {screen.width > screen.height ? (
-          <LogList
-            log={log}
-            setLog={setLog}
-            height={contentRef.current?.clientHeight}
-          />
+          fps ? (
+            <LogList log={log} setLog={setLog} contentRef={contentRef} />
+          ) : (
+            <div className="flex w-52 justify-center">
+              <Loading />
+            </div>
+          )
         ) : (
           <AnimatePresence mode="wait">
             {openModal && (
