@@ -31,7 +31,7 @@ export default function Detect() {
     inputShape: [1, 0, 0, 3],
   });
   const [videoConstraints, setVideoConstraints] = useState({
-    facingMode: FACING_MODE_USER,
+    facingMode: FACING_MODE_ENVIRONMENT,
   });
   const [modelIndex, setModelIndex] = useState(0);
   const [log, setLog] = useState<LogData>(initLogData);
@@ -57,8 +57,6 @@ export default function Detect() {
 
       tf.dispose([warmupResults, dummyInput]); // cleanup memory
     }
-
-    handleCameraSwitch();
   };
 
   const detectRun = () => {
@@ -115,6 +113,7 @@ export default function Detect() {
               videoConstraints={videoConstraints}
               onPlay={detectRun}
               ref={webcamRef}
+              audio={false}
             />
 
             <canvas
