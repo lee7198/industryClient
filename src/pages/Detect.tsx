@@ -57,7 +57,8 @@ export default function Detect() {
 
       tf.dispose([warmupResults, dummyInput]); // cleanup memory
     }
-    return model;
+
+    handleCameraSwitch();
   };
 
   const detectRun = () => {
@@ -88,7 +89,6 @@ export default function Detect() {
 
   useEffect(() => {
     detectRun();
-    handleCameraSwitch();
   }, [model]);
 
   useEffect(() => {
