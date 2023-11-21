@@ -2,6 +2,7 @@ import React from 'react';
 import { LogData } from '../type';
 import { Trash } from '@phosphor-icons/react';
 import { initLogData } from '../data';
+import Loading from './Loading';
 
 export default function LogList({
   log,
@@ -10,9 +11,9 @@ export default function LogList({
 }: {
   log: LogData;
   setLog: React.Dispatch<React.SetStateAction<LogData>>;
-  height: number;
+  height: number | undefined;
 }) {
-  return (
+  return height ? (
     <div
       className={`h-auto w-52 overflow-hidden rounded-2xl bg-zinc-100 px-2 py-4`}
       style={{ height: height }}
@@ -46,5 +47,7 @@ export default function LogList({
         )}
       </div>
     </div>
+  ) : (
+    <Loading />
   );
 }

@@ -13,6 +13,7 @@ import { LogData } from '../type.d';
 import Status from '../components/Status';
 import useWindowSize from '../hooks/useWindowSize';
 import LogList from '../components/LogList';
+import Loading from '../components/Loading';
 
 const FACING_MODE_USER = 'user';
 const FACING_MODE_ENVIRONMENT = 'environment';
@@ -90,7 +91,7 @@ export default function Detect() {
     init();
   }, [modelIndex]);
 
-  return (
+  return model.net ? (
     <>
       <div className="flex h-[100svh] w-full touch-none flex-row items-center justify-center gap-4 overflow-x-scroll sm:px-10">
         <div
@@ -102,10 +103,8 @@ export default function Detect() {
               !webcamRef.current ? 'animate-pulse' : ''
             }`}
           >
-            {webcamRef && webcamRef.current ? (
+            {webcamRef && webcamRef.current && (
               <Status webcamRef={webcamRef} fps={fps} />
-            ) : (
-              <ProgressBar className="absolute bottom-[-2px]" />
             )}
             <Webcam
               className="relative aspect-[0.75] w-full object-cover sm:aspect-[1.3333] sm:max-w-[75vw] sm:rounded-2xl xl:max-w-[50vw] "
@@ -137,11 +136,7 @@ export default function Detect() {
           <LogList
             log={log}
             setLog={setLog}
-            height={
-              contentRef.current?.clientHeight
-                ? contentRef.current?.clientHeight
-                : 100
-            }
+            height={contentRef.current?.clientHeight}
           />
         ) : (
           <AnimatePresence mode="wait">
@@ -156,5 +151,9 @@ export default function Detect() {
         )}
       </div>
     </>
+  ) : (
+    <div className="flex h-[100svh] w-full items-center justify-center">
+      <Loading />
+    </div>
   );
 }
