@@ -1,5 +1,7 @@
 [🚀 시연](https://industry-client.vercel.app)
 
+> 개발모드에서 실행하기 `npm i` -> `npm run dev`
+
 # 지역산업 SW인재양성 기반조성사업
 주최·주관: `대구디지털혁신진흥원`, `계명대학교`, `(주)라온에이치씨`
 
@@ -23,3 +25,16 @@
 
 ### 시스템 아키텍처
 ![undefined (3)](https://github.com/lee7198/industryClient/assets/68184254/f43fcc21-3b4a-4fa8-9631-5e379e6d3443)
+
+### 화면 구성
+![image](https://github.com/lee7198/industryClient/assets/68184254/1aee907d-cdb0-40ca-b524-f43fc3f0ad74)
+pc 버전 (반응형)
+
+<p align="center">
+ <img src="https://github.com/lee7198/industryClient/assets/68184254/7d6572dd-5d85-4340-92a5-e7f552b19e8d" height="550"/>
+</p>
+모바일 버전 (반응형)
+
+### 사용된 기술 
+- 클라이언트 `React Vite`, `tailwind`, `tensorflow.js`,  `typescript`, `EsLint` ...
+- 모델 `Yolo v8 (python)`, `Auto Labeling`
