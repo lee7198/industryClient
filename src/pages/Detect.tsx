@@ -4,7 +4,6 @@ import * as tf from '@tensorflow/tfjs';
 import Webcam from 'react-webcam';
 // @ts-ignore-error
 import { detectVideo } from '../utils/detection';
-import ProgressBar from '../components/ProgressBar';
 import FooterNav from '../components/FooterNav';
 import { initLogData, models } from '../data';
 import LogListMobile from '../components/LogListMobile';
@@ -93,11 +92,20 @@ export default function Detect() {
     init();
   }, [modelIndex]);
 
-  return model.net ? (
+  return (
     <>
       <div className="flex h-[100svh] w-full touch-none flex-row items-center justify-center gap-4 overflow-x-scroll sm:px-10">
         <div
-          className="relative flex flex-col items-center justify-center pb-10 sm:pb-0"
+          className={`h-[100svh] w-full items-center justify-center ${
+            !detecting ? 'flex' : 'hidden'
+          }`}
+        >
+          <Loading />
+        </div>
+        <div
+          className={`relative  flex-col items-center justify-center pb-10 sm:pb-0 ${
+            detecting ? 'flex' : 'hidden'
+          }`}
           ref={contentRef}
         >
           <div
@@ -156,9 +164,5 @@ export default function Detect() {
         )}
       </div>
     </>
-  ) : (
-    <div className="flex h-[100svh] w-full items-center justify-center">
-      <Loading />
-    </div>
   );
 }
