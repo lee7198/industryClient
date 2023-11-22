@@ -24,10 +24,14 @@
 - 사용된 데이터셋: ~~현대자동차 차량 131종과 데이터셋 10,000여장~~ -> 정확도를 위해 현대자동차 57종의 차량과 데이터셋 10,000여장 사용
 
 ### 시스템 아키텍처
-![undefined (3)](https://github.com/lee7198/industryClient/assets/68184254/f43fcc21-3b4a-4fa8-9631-5e379e6d3443)
+<p align="center">
+ <img src="https://github.com/lee7198/industryClient/assets/68184254/f43fcc21-3b4a-4fa8-9631-5e379e6d3443" width="720"/>
+</p>
 
 ### 화면 구성
-![image](https://github.com/lee7198/industryClient/assets/68184254/1aee907d-cdb0-40ca-b524-f43fc3f0ad74)
+<p align="center">
+ <img src="https://github.com/lee7198/industryClient/assets/68184254/1aee907d-cdb0-40ca-b524-f43fc3f0ad74" width="720"/>
+</p>
 pc 버전 (반응형)
 
 <p align="center">
