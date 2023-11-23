@@ -13,12 +13,17 @@ import Status from '../components/Status';
 import useWindowSize from '../hooks/useWindowSize';
 import LogList from '../components/LogList';
 import Loading from '../components/Loading';
+import PercentedLoading from '../components/PercentedLoading';
 
 const FACING_MODE_USER = 'user';
 const FACING_MODE_ENVIRONMENT = 'environment';
 
 export default function Detect() {
-  const [detecting, setDetecting] = useState(false);
+  const [loading, setLoading] = useState({
+    loading: false,
+    progress: 0,
+    run: false,
+  });
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -42,6 +47,15 @@ export default function Detect() {
   const init = async () => {
     const yolo = await tf.loadGraphModel(
       `${window.location.href}/${models[modelIndex]}/model.json`,
+      {
+        onProgress: (fractions) => {
+          setLoading((prev) => ({
+            ...prev,
+            loading: true,
+            progress: fractions,
+          }));
+        },
+      },
     );
 
     if (yolo.inputs[0].shape) {
@@ -67,7 +81,10 @@ export default function Detect() {
         setLog,
         setFps,
       );
-      setDetecting(true);
+      setLoading((prev) => ({
+        ...prev,
+        run: true,
+      }));
     }
   };
 
@@ -97,14 +114,18 @@ export default function Detect() {
       <div className="flex h-[100svh] w-full touch-none flex-row items-center justify-center gap-4 overflow-x-scroll sm:px-10">
         <div
           className={`h-[100svh] w-full items-center justify-center ${
-            !detecting ? 'flex' : 'hidden'
+            !loading.run ? 'flex' : 'hidden'
           }`}
         >
-          <Loading />
+          {loading.loading && (
+            <PercentedLoading
+              percent={Number((loading.progress * 100).toFixed(0))}
+            />
+          )}
         </div>
         <div
           className={`relative  flex-col items-center justify-center pb-10 sm:pb-0 ${
-            detecting ? 'flex' : 'hidden'
+            loading.run ? 'flex' : 'hidden'
           }`}
           ref={contentRef}
         >
@@ -143,7 +164,8 @@ export default function Detect() {
           />
         </div>
 
-        {detecting &&
+        {/* aside log */}
+        {loading.run &&
           (screen.width > screen.height ? (
             fps ? (
               <LogList log={log} setLog={setLog} contentRef={contentRef} />
