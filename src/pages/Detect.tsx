@@ -143,25 +143,26 @@ export default function Detect() {
           />
         </div>
 
-        {screen.width > screen.height ? (
-          fps ? (
-            <LogList log={log} setLog={setLog} contentRef={contentRef} />
+        {detecting &&
+          (screen.width > screen.height ? (
+            fps ? (
+              <LogList log={log} setLog={setLog} contentRef={contentRef} />
+            ) : (
+              <div className="flex w-52 justify-center">
+                <Loading />
+              </div>
+            )
           ) : (
-            <div className="flex w-52 justify-center">
-              <Loading />
-            </div>
-          )
-        ) : (
-          <AnimatePresence mode="wait">
-            {openModal && (
-              <LogListMobile
-                log={log}
-                setLog={setLog}
-                setOpenModal={setOpenModal}
-              />
-            )}
-          </AnimatePresence>
-        )}
+            <AnimatePresence mode="wait">
+              {openModal && (
+                <LogListMobile
+                  log={log}
+                  setLog={setLog}
+                  setOpenModal={setOpenModal}
+                />
+              )}
+            </AnimatePresence>
+          ))}
       </div>
     </>
   );
