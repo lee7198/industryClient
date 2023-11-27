@@ -1,8 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Transition, Variants, motion } from 'framer-motion';
 
 export default function PercentedLoading({ percent }: { percent: number }) {
-  const ContainerVariants = {
+  const ContainerVariants: Variants = {
     initial: {
       transition: {
         staggerChildren: 0.2,
@@ -15,7 +15,7 @@ export default function PercentedLoading({ percent }: { percent: number }) {
     },
   };
 
-  const DotVariants = {
+  const DotVariants: Variants = {
     initial: {
       y: '0%',
     },
@@ -24,9 +24,11 @@ export default function PercentedLoading({ percent }: { percent: number }) {
     },
   };
 
-  const DotTransition = {
-    duration: 0.5,
+  const DotTransition: Transition = {
+    duration: 1,
     yoyo: Infinity,
+    repeat: Infinity,
+    repeatType: 'reverse',
     ease: 'easeInOut',
   };
 
