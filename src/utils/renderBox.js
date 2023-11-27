@@ -36,17 +36,6 @@ export const renderBoxes = (
     const color = colors.get(classes_data[i]);
     const score = (scores_data[i] * 100).toFixed(1);
 
-    // 80% 이상의 score만 반영
-    // if (score < 50) return;
-
-    if (classes_data.length != 0) {
-      setLog((prev) => {
-        // 중복 제거
-        if (prev.list.indexOf(labels[classes_data[i]]) !== -1) return prev;
-        else return { ...prev, list: [...prev.list, labels[classes_data[i]]] };
-      });
-    }
-
     let [y1, x1, y2, x2] = boxes_data.slice(i * 4, (i + 1) * 4);
     x1 *= ratios[0];
     x2 *= ratios[0];
@@ -54,6 +43,20 @@ export const renderBoxes = (
     y2 *= ratios[1];
     const width = x2 - x1;
     const height = y2 - y1;
+
+    // 50% 이상의 score만 반영
+    if (score < 50) return;
+
+    if (classes_data.length != 0) {
+      // 바운딩 박스의 크기를 기준 반영
+      if (width / height > 1.2)
+        setLog((prev) => {
+          // 중복 제거
+          if (prev.list.indexOf(labels[classes_data[i]]) !== -1) return prev;
+          else
+            return { ...prev, list: [...prev.list, labels[classes_data[i]]] };
+        });
+    }
 
     // draw box.
     ctx.fillStyle = Colors.hexToRgba(color, 0.2);
