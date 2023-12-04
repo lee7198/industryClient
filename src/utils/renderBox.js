@@ -44,12 +44,13 @@ export const renderBoxes = (
     const width = x2 - x1;
     const height = y2 - y1;
 
-    // 50% 이상의 score만 반영
-    if (score < 50) return;
+    // 80% 미만의 score 무시
+    if (score < 80) return;
 
     if (classes_data.length != 0) {
       // 바운딩 박스의 크기를 기준 반영
-      if (width / height > 1.2)
+      const ratio = Math.max(width, height) / Math.min(width, height);
+      if (ratio > 1.2 && ratio <= 1.8)
         setLog((prev) => {
           // 중복 제거
           if (prev.list.indexOf(labels[classes_data[i]]) !== -1) return prev;
