@@ -44,19 +44,17 @@ export const renderBoxes = (
     const width = x2 - x1;
     const height = y2 - y1;
 
-    // 80% 미만의 score 무시
-    if (score < 80) return;
+    const ratio = Math.max(width, height) / Math.min(width, height);
+    // 80% 미만의 score 무시 && 특정 비율의 바운딩 박스만 처리
+    if (score < 80 || (ratio < 1.2 && ratio < 1.8)) break;
 
     if (classes_data.length != 0) {
       // 바운딩 박스의 크기를 기준 반영
-      const ratio = Math.max(width, height) / Math.min(width, height);
-      if (ratio > 1.2 && ratio <= 1.8)
-        setLog((prev) => {
-          // 중복 제거
-          if (prev.list.indexOf(labels[classes_data[i]]) !== -1) return prev;
-          else
-            return { ...prev, list: [...prev.list, labels[classes_data[i]]] };
-        });
+      setLog((prev) => {
+        // 중복 제거
+        if (prev.list.indexOf(labels[classes_data[i]]) !== -1) return prev;
+        else return { ...prev, list: [...prev.list, labels[classes_data[i]]] };
+      });
     }
 
     // draw box.
