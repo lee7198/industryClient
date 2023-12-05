@@ -43,7 +43,7 @@ export default function FooterNav({
             )}
             <ClockCounterClockwise size={28} weight="light" />
           </div>
-          <div className="flex">
+          <div className="flex gap-2">
             <div
               onClick={() => setModal(true)}
               className="cursor-pointer p-2 text-xs leading-7 transition-all duration-300 ease-in-out active:scale-[90%]"
@@ -70,7 +70,7 @@ export default function FooterNav({
             className="fixed left-0 top-0 z-[99] flex h-[100svh] w-screen items-center justify-center bg-white"
           >
             <video
-              className="h-3/4 rounded-3xl border-2 border-zinc-200 shadow-2xl"
+              className="aspect-[0.4646] h-3/4 overflow-hidden rounded-3xl border-2 border-zinc-200 bg-slate-300 shadow-2xl"
               muted
               autoPlay
               loop
