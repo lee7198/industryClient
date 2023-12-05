@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { CameraRotate, ClockCounterClockwise } from '@phosphor-icons/react';
+import { CameraRotate, ClockCounterClockwise, X } from '@phosphor-icons/react';
+import { AnimatePresence, motion } from 'framer-motion';
 // import { models } from '../data';
 import { LogData } from '../type';
 import logo from '../assets/images/kmu_logo.jpg';
@@ -60,21 +61,31 @@ export default function FooterNav({
       </div>
 
       {/* modal */}
-      {modal && (
-        <div
-          className="fixed left-0 top-0 z-[99] flex h-[100svh] w-screen items-center justify-center bg-white"
-          onClick={() => setModal((prev) => !prev)}
-        >
-          <video
-            className="h-3/4 rounded-3xl border-2 border-zinc-200 shadow-2xl"
-            muted
-            autoPlay
-            loop
+      <AnimatePresence mode="wait">
+        {modal && (
+          <motion.div
+            initial={{ opacity: '0%' }}
+            animate={{ opacity: '100%' }}
+            exit={{ opacity: '0%' }}
+            className="fixed left-0 top-0 z-[99] flex h-[100svh] w-screen items-center justify-center bg-white"
           >
-            <source src={video} type="video/mp4" />
-          </video>
-        </div>
-      )}
+            <video
+              className="h-3/4 rounded-3xl border-2 border-zinc-200 shadow-2xl"
+              muted
+              autoPlay
+              loop
+            >
+              <source src={video} type="video/mp4" />
+            </video>
+            <div
+              className="absolute right-2 top-4 cursor-pointer p-4 text-sm font-light sm:right-8 sm:top-8"
+              onClick={() => setModal((prev) => !prev)}
+            >
+              <X size={36} weight="light" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
