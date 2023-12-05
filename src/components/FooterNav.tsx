@@ -66,7 +66,7 @@ export default function FooterNav({
           onClick={() => setModal((prev) => !prev)}
         >
           <video
-            className="h-3/4 rounded-3xl border-4 border-zinc-400 shadow-2xl"
+            className="h-3/4 rounded-3xl border-2 border-zinc-200 shadow-2xl"
             muted
             autoPlay
             loop
